@@ -26,7 +26,7 @@ public class Threads implements Runnable {
         }
     }
 
-    public void start(){
+    public void start() throws InterruptedException {
         if (t==null){
             t=new Thread(this,"t"+Integer.toString(id));
             t.start();

@@ -6,6 +6,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.internal.SystemPropertyUtil;
 
 import java.io.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by PRASHANT on 4/13/2017.
@@ -14,7 +16,7 @@ public class ChatClient {
     private String host;
     private int port;
     private int id;
-
+    public static Lock lock=new ReentrantLock();
 /*
     public static void main(String[] args) throws IOException, InterruptedException {
         //new ChatClient("localhost",810).run();
@@ -28,6 +30,7 @@ public class ChatClient {
     }
 
     public void run() throws InterruptedException, IOException {
+        lock.lock();
         EventLoopGroup workerGroup=new NioEventLoopGroup();
 
         try{
@@ -45,6 +48,7 @@ public class ChatClient {
         }
         finally {
             workerGroup.shutdownGracefully();
+            lock.unlock();
         }
     }
 }

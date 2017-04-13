@@ -4,6 +4,7 @@
 import com.mongodb.*;
 import com.mongodb.util.JSON;
 import com.mongodb.util.JSONSerializers;
+import com.sun.deploy.util.SyncAccess;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundMessageHandlerAdapter;
@@ -13,10 +14,12 @@ import jdk.nashorn.internal.parser.JSONParser;
 import org.json.simple.JSONObject;
 
 import java.net.UnknownHostException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ChatServerHandler extends ChannelInboundMessageHandlerAdapter<String> {
-
     private static final ChannelGroup channels=new DefaultChannelGroup();
+    public static Lock lock=new ReentrantLock();
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
@@ -38,14 +41,16 @@ public class ChatServerHandler extends ChannelInboundMessageHandlerAdapter<Strin
 
     public void writeIntoDatabase(String s) throws UnknownHostException {
         MongoClient mongoclient=new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
-        DB database=mongoclient.getDB("Let");
+        DB database=mongoclient.getDB("N");
         DBObject a=(DBObject) JSON.parse(s);
         DBCollection collection=database.getCollection("device"+a.get("_id"));
         collection.insert(a);
     }
 
     public void messageReceived(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
-        Channel incoming=channelHandlerContext.channel();
-        writeIntoDatabase(s);
+            lock.lock();
+            Channel incoming = channelHandlerContext.channel();
+            writeIntoDatabase(s);
+            lock.unlock();
     }
 }

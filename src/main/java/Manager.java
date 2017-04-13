@@ -3,7 +3,11 @@
  */
 public class Manager {
     public static void main(String[] args) throws InterruptedException {
-        Threads one=new Threads("localhost",100,6);
-        one.start();
+        Threads[] t=new Threads[20];
+        for (int i=0;i<20;i++){
+            t[i]=new Threads("localhost",100,i);
+            System.out.println(i+" Created");
+            t[i].start();
+        }
     }
 }

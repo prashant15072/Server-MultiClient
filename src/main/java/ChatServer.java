@@ -10,10 +10,10 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class ChatServer {
 
-    int port ;
+    private int port ;
 
     public static void main(String[] args) throws InterruptedException {
-        new ChatServer(810).run();
+        new ChatServer(100).run();
     }
 
     public ChatServer(int port){

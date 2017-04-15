@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ChatServerHandler extends ChannelInboundMessageHandlerAdapter<String> {
     private static final ChannelGroup channels=new DefaultChannelGroup();
-    public static Lock lock=new ReentrantLock();
+//    public static Lock lock=new ReentrantLock();
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
@@ -48,9 +48,18 @@ public class ChatServerHandler extends ChannelInboundMessageHandlerAdapter<Strin
     }
 
     public void messageReceived(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
-            lock.lock();
-            Channel incoming = channelHandlerContext.channel();
-            writeIntoDatabase(s);
-            lock.unlock();
+//            lock.lock();
+//            writeIntoDatabase(s);
+       /* Channel incoming=channelHandlerContext.channel();
+        System.out.println(s);
+        incoming.write(s);*/
+//            lock.unlock();
+        System.out.println(s);
+        Channel incoming=channelHandlerContext.channel();
+        for (Channel channel:channels){
+            if (channel==incoming){
+                channel.write("["+incoming.remoteAddress()+"]" + s +"\n");
+            }
+        }
     }
 }

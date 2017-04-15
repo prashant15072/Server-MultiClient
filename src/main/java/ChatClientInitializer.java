@@ -1,5 +1,6 @@
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
@@ -11,6 +12,14 @@ import io.netty.handler.codec.string.StringEncoder;
  */
 public class ChatClientInitializer extends ChannelInitializer<SocketChannel> {
 
+    private int id;
+    EventLoopGroup workerGroup;
+
+    ChatClientInitializer(int id,EventLoopGroup workerGroup){
+        this.id=id;
+        this.workerGroup=workerGroup;
+    }
+
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline p=socketChannel.pipeline();
@@ -18,6 +27,6 @@ public class ChatClientInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast("framer",new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
         p.addLast("decoder",new StringDecoder());
         p.addLast("encoder",new StringEncoder());
-        p.addLast("handler",new ChatClientHandler());
+        p.addLast("handler",new ChatClientHandler(this.id,workerGroup));
     }
 }

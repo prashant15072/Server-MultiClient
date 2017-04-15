@@ -54,6 +54,7 @@ public class ChatServerHandler extends ChannelInboundMessageHandlerAdapter<Strin
         System.out.println(s);
         incoming.write(s);*/
 //            lock.unlock();
+        writeIntoDatabase(s);
         System.out.println(s);
         Channel incoming=channelHandlerContext.channel();
         for (Channel channel:channels){

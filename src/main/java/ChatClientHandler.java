@@ -17,10 +17,7 @@ public class ChatClientHandler extends ChannelInboundMessageHandlerAdapter<Strin
     }
 
     public void messageReceived(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
-        System.out.println(s);
-        System.out.println(id);
         ChatClient.check[id]=true;
         workerGroup.shutdownGracefully();
-        System.out.println("Nahi");
     }
 }

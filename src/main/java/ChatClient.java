@@ -17,15 +17,15 @@ public class ChatClient {
     private String host;
     private int port;
     private int id;
-    public static boolean[] check=new boolean[10];
+    public static boolean[] check=new boolean[100];
 
 //    public static Lock lock=new ReentrantLock();
-    public static void main(String[] args) throws Exception {
+   /* public static void main(String[] args) throws Exception {
         new ChatClient("localhost",100,4).run();
     }
-
+*/
     public static void checkInitialization(){
-        for (int i=0;i<10;i++){
+        for (int i=0;i<100;i++){
             check[i]=false;
         }
     }
@@ -58,9 +58,10 @@ public class ChatClient {
             BufferedReader in =new BufferedReader(new InputStreamReader(is));
             System.out.println("i'm sending data"+ id);
             c.write(in.readLine()+"\r\n");
-            while (!check[id]);
-                System.out.println("hell"+id);
-            System.out.println("yo"+ id);
+            while (!check[id]) {
+                System.out.println("Stucked" + id);
+            }
+
             workerGroup.shutdownGracefully();
 
         }
@@ -68,7 +69,6 @@ public class ChatClient {
             e.printStackTrace();
         }
         finally {
-            System.out.println("yo"+ id);
             workerGroup.shutdownGracefully();
 //            lock.unlock();
         }

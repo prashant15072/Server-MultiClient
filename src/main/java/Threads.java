@@ -19,7 +19,6 @@ public class Threads implements Runnable {
         ChatClient a=new ChatClient(this.host,this.port,this.id);
         try {
             a.run();
-            System.out.println("p");
         }catch (Exception e) {
             e.printStackTrace();
         }
